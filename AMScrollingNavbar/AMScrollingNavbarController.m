@@ -285,7 +285,7 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
     float delta = self.lastContentOffset - translation.y;
     self.lastContentOffset = translation.y;
     
-    if ([self checkRubberbanding:delta]) {
+    if (ABS(translation.x) < ABS(translation.y) && [self checkRubberbanding:delta]) {
         [self scrollWithDelta:delta];
     }
     

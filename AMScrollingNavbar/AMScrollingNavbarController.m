@@ -9,8 +9,7 @@
 #define IS_IPHONE_6_PLUS [UIScreen mainScreen].scale == 3
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
-#import "UIViewController+ScrollingNavbar.h"
-#import <objc/runtime.h>
+#import "AMScrollingNavbarController.h"
 
 @interface AMScrollingNavbarController ()  <UIGestureRecognizerDelegate>
 @property (nonatomic, readonly) UINavigationController *navigationController;

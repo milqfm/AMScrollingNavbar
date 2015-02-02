@@ -39,6 +39,7 @@
  set this property as the outer most view that gets added to UINavigationController.
  */
 @property (nonatomic, strong) UIView *containerView;
+@property (nonatomic, assign) CGFloat bottomBarHeight;
 
 - (instancetype)initWithViewController:(UIViewController *)viewController;
 /**-----------------------------------------------------------------------------

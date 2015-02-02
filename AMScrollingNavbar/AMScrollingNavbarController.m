@@ -487,7 +487,7 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
     if (self.scrollableViewConstraint) {
         self.scrollableViewConstraint.constant = -1 * ([self navbarHeight] - frame.origin.y);
     } else {
-        frame.size.height = [UIScreen mainScreen].bounds.size.height - frame.origin.y;
+        frame.size.height = [UIScreen mainScreen].bounds.size.height - frame.origin.y - self.bottomBarHeight;
         viewToAdjust.frame = frame;
     }
     

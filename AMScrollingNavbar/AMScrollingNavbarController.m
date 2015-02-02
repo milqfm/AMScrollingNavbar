@@ -168,17 +168,13 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
 }
 
 - (void)didBecomeActive:(id)sender {
-    // This works fine in iOS8 without the ugly delay. Oh well.
-    NSTimeInterval time = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0") ? 0 : 0.1;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (self.expanded) {
-            [self showNavbar];
-        } else if (self.collapsed) {
-            self.collapsed = NO;
-            self.expanded = YES;
-            [self hideNavbarAnimated:NO];
-        }
-    });
+    [self restoreState];
+}
+
+- (void)restoreState {
+    if (self.navigationController) {
+        [self checkForPartialScroll];
+    }
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {

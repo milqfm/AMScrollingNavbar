@@ -118,6 +118,8 @@
  */
 - (void)hideNavbarAnimated:(BOOL)animated;
 
+- (void)restoreState;
+
 /** Remove the scrollview tracking
  *
  * Use this method to stop following the navbar

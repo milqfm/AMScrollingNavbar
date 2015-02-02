@@ -34,6 +34,12 @@
 @interface AMScrollingNavbarController : NSObject
 @property (nonatomic, weak) UIViewController *viewController;
 
+/** View to adjust the frame instead of the scroll view
+ If there is a container view between UINavigationController's view and the scroll view,
+ set this property as the outer most view that gets added to UINavigationController.
+ */
+@property (nonatomic, strong) UIView *containerView;
+
 - (instancetype)initWithViewController:(UIViewController *)viewController;
 /**-----------------------------------------------------------------------------
  * @name UIViewController+ScrollingNavbar

@@ -458,18 +458,18 @@
     CGRect frameNav = self.navigationController.navigationBar.frame;
     
     // Move and expand (or shrink) the superview of the given scrollview
-    CGRect frame = self.useSuperview ? self.scrollableView.superview.frame : self.scrollableView.frame;
+    UIView *viewToAdjust = self.containerView;
+    if (!viewToAdjust) {
+        viewToAdjust = self.useSuperview ? self.scrollableView.superview : self.scrollableView;
+    }
+    CGRect frame = viewToAdjust.frame;
     frame.origin.y = frameNav.origin.y + frameNav.size.height;
     
     if (self.scrollableViewConstraint) {
         self.scrollableViewConstraint.constant = -1 * ([self navbarHeight] - frame.origin.y);
     } else {
         frame.size.height = [UIScreen mainScreen].bounds.size.height - frame.origin.y;
-        if (self.useSuperview) {
-            self.scrollableView.superview.frame = frame;
-        } else {
-            self.scrollableView.frame = frame;
-        }
+        viewToAdjust.frame = frame;
     }
     
     [self.view setNeedsLayout];

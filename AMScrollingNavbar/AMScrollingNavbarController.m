@@ -11,6 +11,17 @@
 
 #import "AMScrollingNavbarController.h"
 
+static const NSInteger kAMNavBarOverlayTag = 23420;
+
+@interface AMOverlayView : UIView
+@property (nonatomic) BOOL collapsed;
+@property (nonatomic) BOOL expanded;
+@end
+
+@implementation AMOverlayView
+@end
+
+
 @interface AMScrollingNavbarController ()  <UIGestureRecognizerDelegate>
 @property (nonatomic, readonly) UINavigationController *navigationController;
 @property (nonatomic, readonly) UIView *view;
@@ -21,7 +32,7 @@
 @property (nonatomic, assign) CGFloat scrollableHeaderOffset;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIView *scrollableView;
-@property (nonatomic, strong) UIView *overlay;
+@property (nonatomic, strong) AMOverlayView *overlay;
 @property (nonatomic, assign) BOOL collapsed;
 @property (nonatomic, assign) BOOL expanded;
 @property (nonatomic, assign) CGFloat lastContentOffset;
@@ -53,23 +64,31 @@
 }
 
 - (void)setCollapsed:(BOOL)collapsed {
-    if (collapsed != _collapsed) {
+    if (collapsed != self.overlay.collapsed) {
         if ([self.scrollingNavbarDelegate respondsToSelector:@selector(navigationBarDidChangeToCollapsed:)]) {
             [self.scrollingNavbarDelegate navigationBarDidChangeToCollapsed:collapsed];
         }
     }
 
-    _collapsed = collapsed;
+    self.overlay.collapsed = collapsed;
+}
+
+- (BOOL)collapsed {
+    return self.overlay.collapsed;
 }
 
 - (void)setExpanded:(BOOL)expanded {
-    if (expanded != _expanded) {
+    if (expanded != self.overlay.expanded) {
         if ([self.scrollingNavbarDelegate respondsToSelector:@selector(navigationBarDidChangeToExpanded:)]) {
             [self.scrollingNavbarDelegate navigationBarDidChangeToExpanded:expanded];
         }
     }
 
-    _expanded = expanded;
+    self.overlay.expanded = expanded;
+}
+
+- (BOOL)expanded {
+    return self.overlay.expanded;
 }
 
 - (void)setScrollableViewConstraint:(NSLayoutConstraint *)constraint withOffset:(CGFloat)offset {
@@ -99,13 +118,17 @@
     [self.panGesture setDelegate:self];
     [self.scrollableView addGestureRecognizer:self.panGesture];
     
-    self.expanded = YES;
-    
     /* The navbar fadeout is achieved using an overlay view with the same barTintColor.
      this might be improved by adjusting the alpha component of every navbar child */
     CGRect frame = self.navigationController.navigationBar.frame;
     frame.origin = CGPointZero;
-    self.overlay = [[UIView alloc] initWithFrame:frame];
+
+    self.overlay = (AMOverlayView *)[self.navigationController.navigationBar viewWithTag:kAMNavBarOverlayTag];
+    if (!self.overlay) {
+        self.overlay = [[AMOverlayView alloc] initWithFrame:frame];
+        self.overlay.tag = kAMNavBarOverlayTag;
+        self.expanded = YES;
+    }
     
     if (self.navigationController.navigationBar.barTintColor) {
         [self.overlay setBackgroundColor:self.navigationController.navigationBar.barTintColor];
@@ -122,7 +145,7 @@
     [self.overlay setUserInteractionEnabled:NO];
     [self.overlay setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [self.navigationController.navigationBar addSubview:self.overlay];
-    [self.overlay setAlpha:0];
+    self.overlay.alpha = self.expanded ? 0 : 1;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didBecomeActive:)

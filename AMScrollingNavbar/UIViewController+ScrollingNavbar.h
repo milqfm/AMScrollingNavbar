@@ -31,8 +31,10 @@
 
 @end
 
-@interface UIViewController (ScrollingNavbar) <UIGestureRecognizerDelegate>
+@interface AMScrollingNavbarController : NSObject
+@property (nonatomic, weak) UIViewController *viewController;
 
+- (instancetype)initWithViewController:(UIViewController *)viewController;
 /**-----------------------------------------------------------------------------
  * @name UIViewController+ScrollingNavbar
  * -----------------------------------------------------------------------------
@@ -127,7 +129,7 @@
  * Set this property to YES to enable the scrolling of the navbar even when the
  * content size of the scroll view is smaller than its height.
  */
-- (void)setShouldScrollWhenContentFits:(BOOL)enabled;
+@property(nonatomic, assign) BOOL shouldScrollWhenContentFits;
 
 /** Add scrolling to a custom view
  *
@@ -145,7 +147,7 @@
  *
  * @param scrollingNavbarDelegate The delegate
  */
-- (void)setScrollingNavbarDelegate:(id <AMScrollingNavbarDelegate>)scrollingNavbarDelegate;
+@property(nonatomic, weak) id<AMScrollingNavbarDelegate> scrollingNavbarDelegate;
 
 /** Use superview as container view
  *
@@ -154,7 +156,7 @@
  *
  * @param useSuperview The BOOL flag.
  */
-- (void)setUseSuperview:(BOOL)useSuperview;
+@property(nonatomic, assign) BOOL useSuperview;
 
 @end
 

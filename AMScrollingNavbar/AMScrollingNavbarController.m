@@ -236,7 +236,7 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
                 [self.view setNeedsLayout];
             }];
         } else {
-            [self updateNavbarAlpha:self.navbarHeight];
+            [self updateNavbarAlpha];
         }
     }
 }
@@ -262,7 +262,7 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
                 self.panGesture.enabled = YES;
             }];
         } else {
-            [self updateNavbarAlpha:self.navbarHeight];
+            [self updateNavbarAlpha];
         }
     }
 }
@@ -475,7 +475,7 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
 }
 
 - (void)updateSizingWithDelta:(CGFloat)delta {
-    [self updateNavbarAlpha:delta];
+    [self updateNavbarAlpha];
     
     // At this point the navigation bar is already been placed in the right position, it'll be the reference point for the other views'sizing
     CGRect frameNav = self.navigationController.navigationBar.frame;
@@ -498,7 +498,7 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
     [self.view setNeedsLayout];
 }
 
-- (void)updateNavbarAlpha:(CGFloat)delta {
+- (void)updateNavbarAlpha {
     CGRect frame = self.navigationController.navigationBar.frame;
     
     if (self.scrollableView != nil) {

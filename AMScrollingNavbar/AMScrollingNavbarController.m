@@ -51,6 +51,10 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
     return self;
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (UINavigationController *)navigationController {
     return self.viewController.navigationController;
 }

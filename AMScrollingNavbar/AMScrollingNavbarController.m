@@ -172,12 +172,12 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
 }
 
 - (void)didBecomeActive:(id)sender {
-    [self restoreState];
+    [self restoreStateAnimated:YES];
 }
 
-- (void)restoreState {
+- (void)restoreStateAnimated:(BOOL)animated {
     if (self.navigationController) {
-        [self checkForPartialScroll];
+        [self checkForPartialScrollAnimated:animated];
     }
 }
 
@@ -291,7 +291,7 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
     
     if ([gesture state] == UIGestureRecognizerStateEnded || [gesture state] == UIGestureRecognizerStateCancelled) {
         // Reset the nav bar if the scroll is partial
-        [self checkForPartialScroll];
+        [self checkForPartialScrollAnimated:YES];
         [self checkForHeaderPartialScroll];
         self.lastContentOffset = 0;
     }
@@ -441,7 +441,7 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
     } completion:nil];
 }
 
-- (void)checkForPartialScroll {
+- (void)checkForPartialScrollAnimated:(BOOL)animated {
     CGFloat pos = self.navigationController.navigationBar.frame.origin.y;
     __block CGRect frame = self.navigationController.navigationBar.frame;
     
@@ -456,8 +456,13 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
             self.expanded = YES;
             self.collapsed = NO;
             
-            [self updateSizingWithDelta:delta];
+            if (animated) {
+                [self updateSizingWithDelta:delta];
+            }
         } completion:nil];
+        if (!animated) {
+            [self updateSizingWithDelta:delta];
+        }
     } else {
         // And back up
         CGFloat delta = frame.origin.y + self.deltaLimit;
@@ -469,8 +474,14 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
             self.expanded = NO;
             self.collapsed = YES;
             
-            [self updateSizingWithDelta:delta];
+            if (animated) {
+                [self updateSizingWithDelta:delta];
+            }
         } completion:nil];
+        if (!animated) {
+            [self updateSizingWithDelta:delta];
+        }
+        
     }
 }
 

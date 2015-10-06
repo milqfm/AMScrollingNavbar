@@ -119,7 +119,7 @@
  */
 - (void)hideNavbarAnimated:(BOOL)animated;
 
-- (void)restoreState;
+- (void)restoreStateAnimated:(BOOL)animated;
 
 /** Remove the scrollview tracking
  *

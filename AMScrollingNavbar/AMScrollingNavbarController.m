@@ -150,6 +150,7 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
     [self.overlay setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [self.navigationController.navigationBar addSubview:self.overlay];
     self.overlay.alpha = self.expanded ? 0 : 1;
+    self.overlay.hidden = self.overlay.alpha == 0;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didBecomeActive:)
@@ -519,6 +520,7 @@ static const NSInteger kAMNavBarOverlayTag = 23420;
     // Change the alpha channel of every item on the navbr. The overlay will appear, while the other objects will disappear, and vice versa
     float alpha = (frame.origin.y + self.deltaLimit) / frame.size.height;
     [self.overlay setAlpha:1 - alpha];
+    self.overlay.hidden = self.overlay.alpha == 0;
     [self.navigationItem.leftBarButtonItems enumerateObjectsUsingBlock:^(UIBarButtonItem *obj, NSUInteger idx, BOOL *stop) {
         obj.customView.alpha = alpha;
     }];
